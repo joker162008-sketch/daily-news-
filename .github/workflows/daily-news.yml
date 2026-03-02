@@ -1,5 +1,4 @@
- ```                                                                                                                      
-   name: Daily Tech/AI News Alert                                                                                         
+ name: Daily Tech/AI News Alert                                                                                         
                                                                                                                           
    on:                                                                                                                    
      schedule:                                                                                                            
@@ -39,5 +38,4 @@
          - name: Display summary                                                                                          
            run: |                                                                                                         
              echo "📊 获取了 ${{ steps.news.outputs.news_count }} 条资讯"                                                 
-             echo "⏰ 时间: ${{ steps.news.outputs.timestamp }}"                                                          
- ```  
+             echo "⏰ 时间: ${{ steps.news.outputs.timestamp }}"  
