@@ -10,21 +10,34 @@
      fetch-and-send-news:                                                                                                 
        runs-on: ubuntu-latest                                                                                             
        steps:                                                                                                             
-         - name: Checkout                                                                                                 
+         - name: Checkout repository                                                                                      
            uses: actions/checkout@v4                                                                                      
+                                                                                                                          
          - name: Set up Python                                                                                            
            uses: actions/setup-python@v5                                                                                  
            with:                                                                                                          
              python-version: '3.11'                                                                                       
+                                                                                                                          
          - name: Install dependencies                                                                                     
-           run: pip install requests                                                                                      
-         - name: Fetch and Send                                                                                           
+           run: |                                                                                                         
+             pip install requests                                                                                         
+                                                                                                                          
+         - name: Fetch Tech/AI News and Send via Discord                                                                  
            env:                                                                                                           
              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}                                                      
-           run: python .github/workflows/fetch_news.py                                                                    
-         - name: Read output                                                                                              
+           run: |                                                                                                         
+             python .github/workflows/fetch_news.py                                                                       
+                                                                                                                          
+         - name: Read news output                                                                                         
            id: news                                                                                                       
            run: |                                                                                                         
              echo "news_count=$(cat news_output.json | python -c 'import json,sys; print(json.load(sys.stdin)["news       
  _count"])')" >> $GITHUB_OUTPUT                                                                                           
- ``` 
+             echo "timestamp=$(cat news_output.json | python -c 'import json,sys; print(json.load(sys.stdin)["time        
+ stamp"])')" >> $GITHUB_OUTPUT                                                                                            
+                                                                                                                          
+         - name: Display summary                                                                                          
+           run: |                                                                                                         
+             echo "📊 获取了 ${{ steps.news.outputs.news_count }} 条资讯"                                                 
+             echo "⏰ 时间: ${{ steps.news.outputs.timestamp }}"                                                          
+ ```  
