@@ -1,4 +1,4 @@
- name: Daily Tech/AI News Alert                                                                                         
+name: Daily Tech/AI News Alert                                                                                         
                                                                                                                           
    on:                                                                                                                    
      schedule:                                                                                                            
