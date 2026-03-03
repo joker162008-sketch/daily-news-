@@ -1,52 +1,41 @@
-# 每日科技/AI资讯推送工作流
-# 每天早上 7 点自动运行
-
-name: Daily Tech/AI News Alert
-
-on:
-  # 每天早上 7 点运行 (北京时间)
-  schedule:
-    - cron: '0 7 * * *'
-  
-  # 支持手动触发
-  workflow_dispatch:
-
-jobs:
-  fetch-and-send-news:
-    runs-on: ubuntu-latest
-    
-    steps:
-      # 1. 检出代码
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      # 2. 设置 Python 环境
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          
-      # 3. 安装依赖
-      - name: Install dependencies
-        run: |
-          pip install requests
-          
-      # 4. 抓取资讯并发送
-      - name: Fetch Tech/AI News and Send via Discord
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          python .github/workflows/fetch_news.py
-          
-      # 5. 读取输出结果
-      - name: Read news output
-        id: news
-        run: |
-          echo "news_count=$(cat news_output.json | python -c 'import json,sys; print(json.load(sys.stdin)["news_count"])')" >> $GITHUB_OUTPUT
-          echo "timestamp=$(cat news_output.json | python -c 'import json,sys; print(json.load(sys.stdin)["timestamp"])')" >> $GITHUB_OUTPUT
-          
-      # 6. 显示摘要
-      - name: Display summary
-        run: |
-          echo "📊 获取了 ${{ steps.news.outputs.news_count }} 条资讯"
-          echo "⏰ 时间: ${{ steps.news.outputs.timestamp }}"
+name: Daily Tech/AI News Alert                                                                                         
+                                                                                                                          
+   on:                                                                                                                    
+     schedule:                                                                                                            
+       - cron: '0 7 * * *'                                                                                                
+     workflow_dispatch:                                                                                                   
+                                                                                                                          
+   jobs:                                                                                                                  
+     fetch-and-send-news:                                                                                                 
+       runs-on: ubuntu-latest                                                                                             
+       steps:                                                                                                             
+         - name: Checkout repository                                                                                      
+           uses: actions/checkout@v4                                                                                      
+                                                                                                                          
+         - name: Set up Python                                                                                            
+           uses: actions/setup-python@v5                                                                                  
+           with:                                                                                                          
+             python-version: '3.11'                                                                                       
+                                                                                                                          
+         - name: Install dependencies                                                                                     
+           run: |                                                                                                         
+             pip install requests                                                                                         
+                                                                                                                          
+         - name: Fetch Tech/AI News and Send via Discord                                                                  
+           env:                                                                                                           
+             DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}                                                      
+           run: |                                                                                                         
+             python .github/workflows/fetch_news.py                                                                       
+                                                                                                                          
+         - name: Read news output                                                                                         
+           id: news                                                                                                       
+           run: |                                                                                                         
+             echo "news_count=$(cat news_output.json | python -c 'import json,sys; print(json.load(sys.stdin)["news       
+ _count"])')" >> $GITHUB_OUTPUT                                                                                           
+             echo "timestamp=$(cat news_output.json | python -c 'import json,sys; print(json.load(sys.stdin)["time        
+ stamp"])')" >> $GITHUB_OUTPUT                                                                                            
+                                                                                                                          
+         - name: Display summary                                                                                          
+           run: |                                                                                                         
+             echo "📊 获取了 ${{ steps.news.outputs.news_count }} 条资讯"                                                 
+             echo "⏰ 时间: ${{ steps.news.outputs.timestamp }}"  
